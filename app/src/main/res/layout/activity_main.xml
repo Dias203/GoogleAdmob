@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:id="@+id/bgMain"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:text="@string/main_activity"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="@dimen/_30sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:text="@string/main_activity_text"
+        android:textSize="@dimen/_10sdp"
+        android:paddingHorizontal="@dimen/_4sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv1" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/admobRewardInterstitialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:text="@string/show_reward_interstitial"
+        app:layout_constraintEnd_toEndOf="@id/tv2"
+        app:layout_constraintStart_toStartOf="@+id/tv2"
+        app:layout_constraintTop_toBottomOf="@id/tv2" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/admobRewardVideoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/admobRewardInterstitialButton"
+        app:layout_constraintEnd_toEndOf="@id/admobRewardInterstitialButton"
+        app:layout_constraintTop_toBottomOf="@id/admobRewardInterstitialButton"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:text="@string/show_reward"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/openSecondActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/admobRewardVideoButton"
+        app:layout_constraintEnd_toEndOf="@id/admobRewardVideoButton"
+        app:layout_constraintTop_toBottomOf="@id/admobRewardVideoButton"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:text="@string/open_secondActivity"/>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/adBannerContainer"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/_210sdp"
+        android:layout_height="0dp"
+        android:background="#8C8B8B"
+        android:gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/openSecondActivity"/>
+
+    <ProgressBar
+        android:id="@+id/loadingProgressBarBanner"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:elevation="@dimen/_10sdp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/adBannerContainer"
+        app:layout_constraintEnd_toEndOf="@id/adBannerContainer"
+        app:layout_constraintStart_toStartOf="@+id/adBannerContainer"
+        app:layout_constraintTop_toTopOf="@id/adBannerContainer" />
+
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

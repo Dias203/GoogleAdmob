@@ -1,0 +1,115 @@
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_250sdp"
+        android:paddingVertical="@dimen/_4sdp"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/_9sdp"
+        android:background="@drawable/native_banner_bg"
+        android:orientation="vertical">
+
+        <com.google.android.gms.ads.nativead.AdChoicesView
+            android:id="@+id/adChoices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"/>
+
+        <com.google.android.gms.ads.nativead.MediaView
+            android:id="@+id/adMedia"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/line"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/adAppIcon"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:background="@drawable/bg_ad"
+            app:layout_constraintBottom_toTopOf="@id/adCallToAction"
+            app:layout_constraintStart_toStartOf="@id/adCallToAction"
+            app:layout_constraintTop_toBottomOf="@id/line"
+            app:srcCompat="@drawable/ic_launcher_background" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/adHeadline"
+            android:layout_width="0dp"
+            tools:text="Salad Eats"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_9sdp"
+            android:layout_marginTop="@dimen/_minus10sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/adAppIcon"
+            app:layout_constraintTop_toTopOf="@id/adAppIcon" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/adText"
+            android:layout_width="@dimen/_20sdp"
+            android:background="@drawable/bg_ad"
+            android:text="@string/ad_attribution"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/adHeadline"
+            app:layout_constraintStart_toStartOf="@id/adHeadline"
+            app:layout_constraintBottom_toTopOf="@id/adBody"/>
+
+        <RatingBar
+            android:id="@+id/ad_stars"
+            app:layout_constraintStart_toEndOf="@id/adText"
+            app:layout_constraintTop_toTopOf="@id/adText"
+            app:layout_constraintBottom_toBottomOf="@id/adText"
+            android:layout_marginStart="@dimen/_6sdp"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:stepSize="0.5" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/adBody"
+            tools:text="Fresh salad delivered to you"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_9sdp"
+            android:layout_marginBottom="@dimen/_minus10sdp"
+            app:layout_constraintBottom_toBottomOf="@id/adAppIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/adAppIcon" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@android:style/Widget.Button"
+            android:id="@+id/adCallToAction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:paddingHorizontal="@dimen/_9sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Install" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.gms.ads.nativead.NativeAdView>
