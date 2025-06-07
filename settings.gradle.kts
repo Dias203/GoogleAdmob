@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "OpenAppAds"
+rootProject.name = "TestGoogleAdmob"
 include(":app")
  

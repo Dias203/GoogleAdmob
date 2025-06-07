@@ -1,3 +1,4 @@
+/*
 package com.example.openappads.extensions
 
 import android.content.Intent
@@ -194,3 +195,4 @@ private fun MainActivity.setLoadingState(isLoading: Boolean) {
 private fun MainActivity.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
+*/

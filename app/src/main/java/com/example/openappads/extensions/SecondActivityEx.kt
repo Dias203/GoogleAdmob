@@ -1,3 +1,4 @@
+/*
 package com.example.openappads.extensions
 
 import android.content.Intent
@@ -49,7 +50,9 @@ fun SecondActivity.onActivityPaused() {
 }
 
 fun SecondActivity.onActivityResumed() {
-    if(!interstitialAd.setActivityPaused() /*&& interstitialAd.hasPendingShowRequest()*/ && interstitialAd.isAdReady()) {
+    if(!interstitialAd.setActivityPaused() */
+/*&& interstitialAd.hasPendingShowRequest()*//*
+ && interstitialAd.isAdReady()) {
         interstitialAd.showInterstitialAd(this)
     }
 }
@@ -67,4 +70,4 @@ fun SecondActivity.setLoadingState(isLoading: Boolean) {
     binding.bgSecond.setBackgroundColor(
         if (isLoading) Color.parseColor("#8C8B8B") else Color.WHITE
     )
-}
+}*/

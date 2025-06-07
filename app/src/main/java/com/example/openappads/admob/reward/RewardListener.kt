@@ -5,4 +5,5 @@ interface RewardListener {
     fun onAdFailedToLoad(error: String)
     fun onAdDismiss()
     fun onFailedToShow(error: String)
+    fun onShowed()
 }

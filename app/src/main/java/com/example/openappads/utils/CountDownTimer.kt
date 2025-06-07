@@ -22,7 +22,7 @@ class CountDownTimer {
         }
     }
 
-    private var jobProgress: ProgressUpdated? = null
+    private var jobProgress: UpdateProgress? = null
 
     fun setMaxProgress(maxProgress: Int) {
         this.max = maxProgress
@@ -36,17 +36,17 @@ class CountDownTimer {
         this.delay = ((second * 1000) / max).toLong()
     }
 
-    fun startJob(listener: ProgressUpdated?) {
+    fun startJob(listener: UpdateProgress?) {
         jobProgress = listener
         stopJob()
         if (isProgressMax()) {
-            jobProgress?.onProgressUpdated(progress)
+            jobProgress?.onUpdateProgress(progress)
             return
         }
         loopingFlowJob = coroutineScope.launch(Dispatchers.Main) {
             loopingFlow.collect {
                 progress++
-                jobProgress?.onProgressUpdated(progress)
+                jobProgress?.onUpdateProgress(progress)
                 if (isProgressMax()) stopJob()
             }
         }
@@ -66,7 +66,7 @@ class CountDownTimer {
         return progress >= max
     }
 
-    interface ProgressUpdated {
-        fun onProgressUpdated(count: Int)
+    interface UpdateProgress {
+        fun onUpdateProgress(count: Int)
     }
 }

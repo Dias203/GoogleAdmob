@@ -5,4 +5,5 @@ interface RewardInterstitialAdmobListener {
     fun onFailedAdLoad(error: String)
     fun onAdDismiss()
     fun onFailedToShow(error: String)
+    fun onShowed()
 }
