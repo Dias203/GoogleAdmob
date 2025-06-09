@@ -43,12 +43,10 @@ class AdmobInterstitial(private val context: Context) {
             AdRequest.Builder().build(),
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(ad: InterstitialAd) {
-                    super.onAdLoaded(ad)
                     setStateOnAdLoaded(ad)
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
-                    super.onAdFailedToLoad(error)
                     setStateOnAdFailedToLoad(error)
                 }
             })
@@ -71,9 +69,8 @@ class AdmobInterstitial(private val context: Context) {
 
 
     fun showAd(activity: AppCompatActivity) {
-        ECOLog.showLog("!isAdReady(): " + !isAdReady())
         if (!isAdReady()) {
-            ECOLog.showLog("Vao day")
+            ECOLog.showLog("Call to !isAdReady(): " + !isAdReady())
             return
         }
 

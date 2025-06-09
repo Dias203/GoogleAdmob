@@ -69,8 +69,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.eco.iconchanger.theme.widget.utils.ECOLog
 import com.example.openappads.MyApplication
 import com.example.openappads.admob.banner.BannerAd
+import com.example.openappads.admob.interstitial.AdmobInterstitial
 import com.example.openappads.admob.reward_interstitial.AdmobRewardInterstitial
-import com.example.openappads.admob.interstitial.InterstitialAdmob
 import com.example.openappads.admob.reward.AdmobReward
 import com.example.openappads.databinding.ActivityMainBinding
 import com.example.openappads.extensions.loadAdMob
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), CountDownTimer.UpdateProgress {
     internal lateinit var binding: ActivityMainBinding
 
     val bannerAd by lazy { BannerAd(applicationContext) }
-    val interstitialAd by lazy { InterstitialAdmob(applicationContext) }
+    val interstitialAd by lazy { AdmobInterstitial(applicationContext) }
     val rewardAd by lazy { AdmobReward(applicationContext) }
     val rewardInterstitialAd by lazy { AdmobRewardInterstitial(applicationContext) }
     val countDownTimer by lazy { CountDownTimer() }

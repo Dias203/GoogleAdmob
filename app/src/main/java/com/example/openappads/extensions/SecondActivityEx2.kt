@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import com.eco.iconchanger.theme.widget.utils.ECOLog
 import com.example.openappads.admob.interstitial.InterstitialAdmobListener
 import com.example.openappads.screens.MainActivity
@@ -107,7 +106,6 @@ private fun SecondActivity.showToast(message: String) {
 }
 fun SecondActivity.loadAdMob() {
     bannerAd.load(binding.adBannerContainer, true)
-    countDownTimer.setProcessTimeSecond(3)
     interstitialAd.preloadInterstitialAd()
     nativeAd.loadNativeAd(binding.adFrame)
 }
