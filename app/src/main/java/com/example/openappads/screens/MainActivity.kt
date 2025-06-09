@@ -98,8 +98,6 @@ class MainActivity : AppCompatActivity(), CountDownTimer.UpdateProgress {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ECOLog.showLog("onCreate")
-
         loadAdMob()
         setOnClick()
     }
@@ -107,6 +105,7 @@ class MainActivity : AppCompatActivity(), CountDownTimer.UpdateProgress {
 
     override fun onPause() {
         super.onPause()
+        ECOLog.showLog("Pause")
         countDownTimer.stopJob()
     }
 
@@ -117,10 +116,14 @@ class MainActivity : AppCompatActivity(), CountDownTimer.UpdateProgress {
 
     override fun onResume() {
         super.onResume()
-        if (isAdRequest && (rewardAd.isLoading() || rewardAd.isAdReady())) {
+        ECOLog.showLog("onResume")
+        if(!isAdRequest) return
+        if (rewardAd.isLoading() || rewardAd.isAdReady()) {
+            //ECOLog.showLog("Call here")
             countDownTimer.startJob(this)
         }
-        if (isAdRequest && (rewardInterstitialAd.isLoading() || rewardInterstitialAd.isAdReady())) {
+        if (rewardInterstitialAd.isLoading() || rewardInterstitialAd.isAdReady()) {
+            ECOLog.showLog("Call here")
             countDownTimer.startJob(this)
         }
     }

@@ -4,18 +4,17 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.openappads.MyApplication
 import com.example.openappads.R
 import com.example.openappads.admob.openapp.AdmobAppOpen
 import com.example.openappads.extensions.loadAppOpenAdSplash
 import com.example.openappads.extensions.startMainActivity
-import com.example.openappads.utils.CoroutineCountDown
-import com.example.openappads.utils.CoroutineCountDown.ProgressUpdated
+import com.example.openappads.utils.SplashCountDown
+import com.example.openappads.utils.SplashCountDown.ProgressUpdated
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity(), ProgressUpdated {
     val admobAppOpen by lazy { AdmobAppOpen(applicationContext) }
-    val coroutineCountDown by lazy { CoroutineCountDown() }
+    val coroutineCountDown by lazy { SplashCountDown() }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

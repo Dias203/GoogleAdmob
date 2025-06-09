@@ -3,18 +3,13 @@ package com.example.openappads.admob.interstitial
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.eco.iconchanger.theme.widget.utils.ECOLog
-import com.example.openappads.admob.reward.RewardListener
 import com.example.openappads.constants.admob.ADS_INTERSTITIAL_UNIT_ID
-import com.example.openappads.constants.admob.ADS_REWARD_UNIT_ID
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.OnUserEarnedRewardListener
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
 class AdmobInterstitial(private val context: Context) {
     var listener: InterstitialAdmobListener? = null
@@ -84,21 +79,15 @@ class AdmobInterstitial(private val context: Context) {
 
         interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
-                super.onAdDismissedFullScreenContent()
-
                 setStateOnAdDismissedFullScreenContent()
             }
 
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                super.onAdFailedToShowFullScreenContent(adError)
                 ECOLog.showLog("Hiển thị quảng cáo interstitial thất bại - Error Message: ${adError.message}")
-
                 setStateOnAdFailedToShowFullScreenContent(adError)
             }
 
             override fun onAdShowedFullScreenContent() {
-                super.onAdShowedFullScreenContent()
-
                 setStateOnAdShowedFullScreenContent()
             }
         }

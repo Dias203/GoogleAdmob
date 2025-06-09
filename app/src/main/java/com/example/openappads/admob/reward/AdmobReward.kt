@@ -25,12 +25,12 @@ class AdmobReward(private val context: Context) {
     }
 
     fun isAdReady(): Boolean {
-        ECOLog.showLog("$rewardedAd - $isLoading")
+        //ECOLog.showLog("$rewardedAd - $isLoading")
         return rewardedAd != null && !isLoading
     }
 
     fun isLoading() : Boolean {
-        ECOLog.showLog("$rewardedAd - $isLoading")
+        //ECOLog.showLog("$rewardedAd - $isLoading")
         return rewardedAd == null && isLoading
     }
 
@@ -44,12 +44,10 @@ class AdmobReward(private val context: Context) {
             AdRequest.Builder().build(),
             object : RewardedAdLoadCallback() {
                 override fun onAdLoaded(ad: RewardedAd) {
-                    super.onAdLoaded(ad)
                     setStateOnAdLoaded(ad)
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
-                    super.onAdFailedToLoad(error)
                     setStateOnAdFailedToLoad(error)
                 }
             })
@@ -65,36 +63,28 @@ class AdmobReward(private val context: Context) {
     private fun setStateOnAdFailedToLoad(error: LoadAdError) {
         rewardedAd = null
         isLoading = false
-
         ECOLog.showLog("Tải quảng cáo reward thất bại - Error Message: ${error.message}")
         listener?.onAdFailedToLoad(error.message)
     }
 
 
     fun showAd(activity: AppCompatActivity) {
-        ECOLog.showLog("!isAdReady(): " + !isAdReady())
         if (!isAdReady()) {
-            ECOLog.showLog("Vao day")
+            ECOLog.showLog("Call !isAdReady():" + !isAdReady())
             return
         }
 
         rewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
-                super.onAdDismissedFullScreenContent()
-
                 setStateOnAdDismissedFullScreenContent()
             }
 
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                super.onAdFailedToShowFullScreenContent(adError)
                 ECOLog.showLog("Hiển thị quảng cáo reward thất bại - Error Message: ${adError.message}")
-
                 setStateOnAdFailedToShowFullScreenContent(adError)
             }
 
             override fun onAdShowedFullScreenContent() {
-                super.onAdShowedFullScreenContent()
-
                 setStateOnAdShowedFullScreenContent()
             }
         }

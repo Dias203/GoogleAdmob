@@ -31,36 +31,7 @@ private fun MainActivity.handleRewardVideoClick() {
 fun MainActivity.showRewardAd(){
     setLoadingState(true)
     admobOpenAppManager.locked()
-    rewardAd.listener = object : RewardListener {
-        override fun onAdLoaded() {}
-
-        override fun onAdFailedToLoad(error: String) {
-            setLoadingState(false)
-            showToast("Không thể tải quảng cáo!")
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onAdDismiss() {
-            setLoadingState(false)
-            showToast("Mở khóa thành công!")
-            rewardAd.preloadRewardAd()
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onFailedToShow(error: String) {
-            setLoadingState(false)
-            if (error.contains("timeout", ignoreCase = true)) {
-                showToast("Quảng cáo tải quá lâu, tiếp tục luồng!")
-            } else {
-                showToast("Không thể hiển thị quảng cáo!")
-            }
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onShowed() {
-            TODO("Not yet implemented")
-        }
-    }
+    listenerRewardAd()
 
     isAdRequest = true
     setLoadingState(true)
@@ -99,6 +70,36 @@ fun MainActivity.showRewardAd(){
         hideIfNotShowing()
     }
 }
+
+private fun MainActivity.listenerRewardAd() {
+    rewardAd.listener = object : RewardListener {
+        override fun onAdLoaded() {}
+
+        override fun onAdFailedToLoad(error: String) {
+            setLoadingState(false)
+            showToast("Không thể tải quảng cáo!")
+            admobOpenAppManager.unlock()
+        }
+
+        override fun onAdDismiss() {
+            setLoadingState(false)
+            showToast("Mở khóa thành công!")
+            rewardAd.preloadRewardAd()
+            admobOpenAppManager.unlock()
+        }
+
+        override fun onFailedToShow(error: String) {
+            setLoadingState(false)
+            showToast("Không thể hiển thị quảng cáo!")
+            admobOpenAppManager.unlock()
+        }
+
+        override fun onShowed() {
+            TODO("Not yet implemented")
+        }
+    }
+}
+
 fun MainActivity.hideIfNotShowing() {
     setLoadingState(false)
     countDownTimer.stopJob()

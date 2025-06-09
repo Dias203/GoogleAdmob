@@ -5,6 +5,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDexApplication
+import com.eco.iconchanger.theme.widget.utils.ECOLog
 import com.example.openappads.admob.openapp.AdmobAppOpenApplication
 import com.example.openappads.constants.admob.ADS_OPEN_APP_UNIT_ID_DEFAULT
 
@@ -15,6 +16,8 @@ class MyApplication : MultiDexApplication(), Application.ActivityLifecycleCallba
     override fun onCreate() {
         super<MultiDexApplication>.onCreate()
         registerActivityLifecycleCallbacks(this)
+
+        ECOLog.showLog("onCreate")
 
         admobAppOpenManager.initialize()
         ProcessLifecycleOwner.get().lifecycle.addObserver(admobAppOpenManager)

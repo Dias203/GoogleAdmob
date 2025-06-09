@@ -25,7 +25,7 @@ class AdmobRewardInterstitial(private val context: Context) {
     }
 
     fun isAdReady(): Boolean {
-        ECOLog.showLog("$rewardedInterstitialAd - $isLoading")
+        //ECOLog.showLog("$rewardedInterstitialAd - $isLoading")
         return rewardedInterstitialAd != null && !isLoading
     }
 
@@ -72,29 +72,23 @@ class AdmobRewardInterstitial(private val context: Context) {
 
 
     fun showAd(activity: AppCompatActivity) {
-        ECOLog.showLog("!isAdReady(): " + !isAdReady())
         if (!isAdReady()) {
-            ECOLog.showLog("Vao day")
+            ECOLog.showLog("Call !isAdReady(): " + !isAdReady())
             return
         }
 
         rewardedInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
-                super.onAdDismissedFullScreenContent()
-
+                ECOLog.showLog("Dismiss12312313")
                 setStateOnAdDismissedFullScreenContent()
             }
 
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                super.onAdFailedToShowFullScreenContent(adError)
                 ECOLog.showLog("Hiển thị quảng cáo rewardedInterstitialAd thất bại - Error Message: ${adError.message}")
-
                 setStateOnAdFailedToShowFullScreenContent(adError)
             }
 
             override fun onAdShowedFullScreenContent() {
-                super.onAdShowedFullScreenContent()
-
                 setStateOnAdShowedFullScreenContent()
             }
         }

@@ -7,7 +7,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
-class CoroutineCountDown {
+class SplashCountDown {
 
     private var progress = -1
     private var max = 100

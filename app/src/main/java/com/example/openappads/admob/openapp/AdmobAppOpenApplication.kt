@@ -105,15 +105,15 @@ class AdmobAppOpenApplication(
             setAdUnitId(ADS_OPEN_APP_UNIT_ID_DEFAULT)
             listener = object : OpenAppAdListener {
                 override fun onAdLoaded() {
-                    ECOLog.showLog("Ad loaded successfully")
+                    //ECOLog.showLog("Ad loaded successfully")
                 }
 
                 override fun onFailedAdLoad(message: String) {
-                    ECOLog.showLog("Ad failed to load: $message")
+                    //ECOLog.showLog("Ad failed to load: $message")
                 }
 
                 override fun onAdDismiss() {
-                    ECOLog.showLog("Ad dismissed")
+                    //ECOLog.showLog("Ad dismissed")
                     loadAd()
                 }
             }
@@ -148,12 +148,12 @@ class AdmobAppOpenApplication(
 
 
     fun onActivityStarted(activity: Activity) {
-        ECOLog.showLog("onActivityStarted: ${activity.javaClass.simpleName}")
+        //ECOLog.showLog("onActivityStarted: ${activity.javaClass.simpleName}")
         currentActivity = activity
     }
 
     fun onActivityDestroyed(activity: Activity) {
-        ECOLog.showLog("onActivityDestroyed: ${activity.javaClass.simpleName}")
+        //ECOLog.showLog("onActivityDestroyed: ${activity.javaClass.simpleName}")
         if (currentActivity == activity) {
             currentActivity = null
         }
@@ -168,7 +168,7 @@ class AdmobAppOpenApplication(
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        ECOLog.showLog("Application onStop")
+        //ECOLog.showLog("Application onStop")
     }
 
     private fun loadAd() {
