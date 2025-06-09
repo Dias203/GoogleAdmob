@@ -16,6 +16,7 @@ class AdmobRewardInterstitial(private val context: Context) {
     var listener: RewardInterstitialAdmobListener? = null
     private var rewardedInterstitialAd: RewardedInterstitialAd? = null
     private var isLoading = false
+    private var isLoaded = false
 
 
     fun preloadRewardIntersAd() {
@@ -33,6 +34,8 @@ class AdmobRewardInterstitial(private val context: Context) {
         ECOLog.showLog("$rewardedInterstitialAd - $isLoading")
         return rewardedInterstitialAd == null && isLoading
     }
+
+    fun isLoaded() = isLoaded
 
     fun loadAd() {
         if (rewardedInterstitialAd != null || isLoading) return
@@ -59,6 +62,7 @@ class AdmobRewardInterstitial(private val context: Context) {
         ECOLog.showLog("Quảng cáo rewardedInterstitialAd đã được tải thành công")
         rewardedInterstitialAd = ad
         isLoading = false
+        isLoaded = true
         listener?.onAdLoaded()
     }
 
@@ -72,10 +76,11 @@ class AdmobRewardInterstitial(private val context: Context) {
 
 
     fun showAd(activity: AppCompatActivity) {
-        if (!isAdReady()) {
+        /*if (!isAdReady()) {
             ECOLog.showLog("Call !isAdReady(): " + !isAdReady())
             return
-        }
+        }*/
+        ECOLog.showLog("SHOW AD")
 
         rewardedInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {

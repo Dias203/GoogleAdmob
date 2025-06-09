@@ -13,30 +13,34 @@ import com.example.openappads.utils.CountDownTimer
 
 fun SecondActivity.setOnClick() {
     binding.icBack.setOnClickListener {
-        val intentAd = Intent(this, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        }
-        showInterstitialAd(intentAd)
+        showInterstitialAd()
     }
 }
 
-fun SecondActivity.listenerInterstitialAd(intent: Intent){
+private fun SecondActivity.openMainActivity(){
+    val intentAd = Intent(this, MainActivity::class.java).apply {
+        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+    }
+    startActivity(intentAd)
+}
+
+fun SecondActivity.listenerInterstitialAd(){
     interstitialAd.listener = object : InterstitialAdmobListener {
         override fun onAdDismiss() {
             interstitialAd.preloadInterstitialAd()
-            startActivity(intent)
+            openMainActivity()
             setLoadingState(false)
             admobOpenAppManager.unlock()
         }
 
         override fun onAdLoaded() {}
         override fun onFailedAdLoad(error: String) {
-            startActivity(intent)
+            openMainActivity()
             setLoadingState(false)
         }
 
         override fun onFailedToShow(error: String) {
-            startActivity(intent)            }
+            openMainActivity()            }
 
         override fun onShowed() {
             TODO("Not yet implemented")
@@ -44,11 +48,11 @@ fun SecondActivity.listenerInterstitialAd(intent: Intent){
     }
 }
 
-fun SecondActivity.showInterstitialAd(intent: Intent) {
+fun SecondActivity.showInterstitialAd() {
     setLoadingState(true)
     isAdRequest = true
     admobOpenAppManager.locked()
-    listenerInterstitialAd(intent)
+    listenerInterstitialAd()
 
     if (interstitialAd.isAdReady()) {
         // TH1: Ad loaded → timeout 1s rồi show
@@ -80,7 +84,7 @@ fun SecondActivity.showInterstitialAd(intent: Intent) {
         // TH3: fail → tiếp tục
         ECOLog.showLog("TRƯỜNG HỢP 2")
         showToast("Không thể tải quảng cáo!")
-        startActivity(intent)
+        openMainActivity()
         hideIfNotShowing()
     }
 }

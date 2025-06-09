@@ -16,13 +16,10 @@ import com.example.openappads.utils.CountDownTimer
 
 fun MainActivity.setOnClick() {
     binding.apply {
-
         admobRewardVideoButton.setOnClickListener { handleRewardVideoClick() }
-        openSecondActivity.setOnClickListener { handleOpenSecondActivityClick() }
+        openSecondActivity.setOnClickListener { showRewardInterstitial() }
     }
 }
-
-
 
 private fun MainActivity.handleRewardVideoClick() {
     showDialogReward()
@@ -38,7 +35,6 @@ fun MainActivity.showRewardAd(){
     admobOpenAppManager.locked()
 
     if (rewardAd.isAdReady()) {
-        //admobOpenAppManager.locked()
         // TH1: Ad loaded → timeout 1s rồi show
         ECOLog.showLog("Truong hop 1")
         startTimeout(1) {
@@ -122,43 +118,20 @@ fun MainActivity.showDialogReward() {
     dialog.show()
 }
 
-private fun MainActivity.handleOpenSecondActivityClick() {
+
+
+private fun MainActivity.openSecondActivity(){
     val intentAd = Intent(this, SecondActivity::class.java).apply {
         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
-    showRewardInterstitial(intentAd)
+    startActivity(intentAd)
 }
 
-fun MainActivity.showRewardInterstitial(intent: Intent){
+fun MainActivity.showRewardInterstitial(){
     isAdRequest = true
     setLoadingState(true)
     admobOpenAppManager.locked()
-    rewardInterstitialAd.listener = object : RewardInterstitialAdmobListener {
-        override fun onAdDismiss() {
-            startActivity(intent)
-            setLoadingState(false)
-            rewardInterstitialAd.preloadRewardIntersAd()
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onAdLoaded() {}
-
-        override fun onFailedAdLoad(error: String) {
-            startActivity(intent)
-            setLoadingState(false)
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onFailedToShow(error: String) {
-            startActivity(intent)
-            setLoadingState(false)
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onShowed() {
-            TODO("Not yet implemented")
-        }
-    }
+    listenerRewardIntersAd()
 
     if (rewardInterstitialAd.isAdReady()) {
         // TH1: Ad loaded → timeout 1s rồi show
@@ -184,14 +157,43 @@ fun MainActivity.showRewardInterstitial(intent: Intent){
                 ECOLog.showLog( "TH2 THAT BAI " + rewardInterstitialAd.isAdReady())
                 showToast("Tải quảng cáo thất bại")
                 hideIfNotShowing()
-                startActivity(intent)
+                openSecondActivity()
             }
         }
     } else {
         // TH3: fail → tiếp tục
         showToast("Không thể tải quảng cáo!")
         hideIfNotShowing()
-        startActivity(intent)
+        openSecondActivity()
+    }
+}
+
+private fun MainActivity.listenerRewardIntersAd() {
+    rewardInterstitialAd.listener = object : RewardInterstitialAdmobListener {
+        override fun onAdDismiss() {
+            openSecondActivity()
+            setLoadingState(false)
+            rewardInterstitialAd.preloadRewardIntersAd()
+            admobOpenAppManager.unlock()
+        }
+
+        override fun onAdLoaded() {}
+
+        override fun onFailedAdLoad(error: String) {
+            openSecondActivity()
+            setLoadingState(false)
+            admobOpenAppManager.unlock()
+        }
+
+        override fun onFailedToShow(error: String) {
+            openSecondActivity()
+            setLoadingState(false)
+            admobOpenAppManager.unlock()
+        }
+
+        override fun onShowed() {
+            TODO("Not yet implemented")
+        }
     }
 }
 
@@ -213,7 +215,7 @@ fun MainActivity.loadAdMob() {
 
         }
     }
-    // Preload reward ad
+
     rewardAd.preloadRewardAd()
     rewardInterstitialAd.preloadRewardIntersAd()
 }
@@ -249,7 +251,9 @@ fun MainActivity.progressUpdatedReward(){
 }
 
 fun MainActivity.progressUpdatedRewardInterstitial(){
+    ECOLog.showLog("13112003")
     if (countDownTimer.isProgressMax()) {
+        ECOLog.showLog("12345")
         if (rewardInterstitialAd.isAdReady()) {
             rewardInterstitialAd.showAd(this)
             isAdRequest = false
@@ -260,8 +264,9 @@ fun MainActivity.progressUpdatedRewardInterstitial(){
         return
     }
     if (rewardInterstitialAd.isAdReady()) {
+        ECOLog.showLog("678910")
+        rewardInterstitialAd.showAd(this)
         countDownTimer.stopJob()
-        rewardAd.showAd(this)
         isAdRequest= false
     }
 }
@@ -288,3 +293,4 @@ private fun MainActivity.setLoadingState(isLoading: Boolean) {
 private fun MainActivity.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
+
