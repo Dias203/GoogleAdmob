@@ -35,7 +35,6 @@ class AdmobRewardInterstitial(private val context: Context) {
         return rewardedInterstitialAd == null && isLoading
     }
 
-    fun isLoaded() = isLoaded
 
     fun loadAd() {
         if (rewardedInterstitialAd != null || isLoading) return
@@ -76,10 +75,7 @@ class AdmobRewardInterstitial(private val context: Context) {
 
 
     fun showAd(activity: AppCompatActivity) {
-        /*if (!isAdReady()) {
-            ECOLog.showLog("Call !isAdReady(): " + !isAdReady())
-            return
-        }*/
+        if (!isAdReady()) return
         ECOLog.showLog("SHOW AD")
 
         rewardedInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {

@@ -51,12 +51,14 @@ class MainActivity : AppCompatActivity(), CountDownTimer.UpdateProgress {
     override fun onResume() {
         super.onResume()
         ECOLog.showLog("onResume")
-        if(!isAdRequest) return
-        if (rewardAd.isLoading() || rewardAd.isAdReady()) {
-            countDownTimer.startJob(this)
-        }
-        if (rewardInterstitialAd.isLoading() || rewardInterstitialAd.isAdReady()) {
-            countDownTimer.startJob(this)
+        if(isAdRequest) {
+            if (rewardAd.isLoading() || rewardAd.isAdReady()) {
+                countDownTimer.startJob(this)
+            }
+            if (rewardInterstitialAd.isLoading() || rewardInterstitialAd.isAdReady()) {
+                countDownTimer.startJob(this)
+            }
+
         }
     }
 

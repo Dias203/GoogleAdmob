@@ -69,10 +69,8 @@ class AdmobReward(private val context: Context) {
 
 
     fun showAd(activity: AppCompatActivity) {
-        /*if (!isAdReady()) {
-            ECOLog.showLog("Call !isAdReady():" + !isAdReady())
-            return
-        }*/
+        if (!isAdReady()) return
+
 
         rewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {

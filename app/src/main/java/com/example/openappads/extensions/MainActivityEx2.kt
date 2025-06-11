@@ -6,6 +6,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.eco.iconchanger.theme.widget.utils.ECOLog
 import com.example.openappads.admob.banner.BannerListener
 import com.example.openappads.admob.reward.RewardListener
@@ -13,6 +16,9 @@ import com.example.openappads.admob.reward_interstitial.RewardInterstitialAdmobL
 import com.example.openappads.screens.MainActivity
 import com.example.openappads.screens.SecondActivity
 import com.example.openappads.utils.CountDownTimer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 fun MainActivity.setOnClick() {
     binding.apply {
@@ -293,4 +299,6 @@ private fun MainActivity.setLoadingState(isLoading: Boolean) {
 private fun MainActivity.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
+
+
 

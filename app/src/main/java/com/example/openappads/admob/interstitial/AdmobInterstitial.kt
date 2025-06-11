@@ -69,10 +69,8 @@ class AdmobInterstitial(private val context: Context) {
 
 
     fun showAd(activity: AppCompatActivity) {
-        if (!isAdReady()) {
-            ECOLog.showLog("Call to !isAdReady(): " + !isAdReady())
-            return
-        }
+        if (!isAdReady()) return
+
 
         interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
