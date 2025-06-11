@@ -99,13 +99,13 @@
 package com.example.openappads.screens
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.openappads.MyApplication
 import com.example.openappads.R
 import com.example.openappads.admob.banner.BannerAd
@@ -118,6 +118,7 @@ import com.example.openappads.extensions.progressUpdatedInterstitial
 import com.example.openappads.extensions.setLoadingState
 import com.example.openappads.extensions.setOnClick
 import com.example.openappads.extensions.showInterstitialAd
+import com.example.openappads.utils.CooldownManager
 import com.example.openappads.utils.CountDownTimer
 
 class SecondActivity : AppCompatActivity(), CountDownTimer.UpdateProgress {
@@ -131,6 +132,7 @@ class SecondActivity : AppCompatActivity(), CountDownTimer.UpdateProgress {
     val handler = Handler(Looper.getMainLooper())
     var isAdRequest = false
     val countDownTimer by lazy { CountDownTimer() }
+    val cooldownAd by lazy { CooldownManager(lifecycleScope) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

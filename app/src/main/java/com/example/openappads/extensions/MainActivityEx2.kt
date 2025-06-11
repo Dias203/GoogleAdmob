@@ -214,7 +214,6 @@ fun MainActivity.loadAdMob() {
             override fun onLoad() {
                 binding.loadingProgressBarBanner.visibility = View.GONE
             }
-
             override fun onLoadFail(error: String) {
                 TODO("Not yet implemented")
             }

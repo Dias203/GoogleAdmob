@@ -51,28 +51,29 @@
         android:text="@string/open_secondActivity"/>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:id="@+id/adBannerContainer"
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/_210sdp"
         android:layout_height="0dp"
-        android:background="#8C8B8B"
+        android:padding="@dimen/_1sdp"
+        android:backgroundTint="#92000000"
+        android:background="@drawable/bg_ad"
         android:gravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/openSecondActivity"/>
+        app:layout_constraintTop_toBottomOf="@+id/openSecondActivity">
 
-    <ProgressBar
-        android:id="@+id/loadingProgressBarBanner"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
-        android:elevation="@dimen/_10sdp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/adBannerContainer"
-        app:layout_constraintEnd_toEndOf="@id/adBannerContainer"
-        app:layout_constraintStart_toStartOf="@+id/adBannerContainer"
-        app:layout_constraintTop_toTopOf="@id/adBannerContainer" />
+        <ProgressBar
+            android:id="@+id/loadingProgressBarBanner"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:indeterminateTint="@color/white"
+            android:layout_gravity="center"
+            android:elevation="@dimen/_10sdp"
+            android:visibility="visible" />
+    </FrameLayout>
 
     <FrameLayout
         android:background="#AA000000"

@@ -13,7 +13,10 @@ import com.example.openappads.utils.CountDownTimer
 
 fun SecondActivity.setOnClick() {
     binding.icBack.setOnClickListener {
-        showInterstitialAd()
+        cooldownAd.tryShowAd {
+            interstitialAd.showAd(this)
+        }
+        //showInterstitialAd()
     }
 }
 
@@ -27,9 +30,11 @@ private fun SecondActivity.openMainActivity(){
 fun SecondActivity.listenerInterstitialAd(){
     interstitialAd.listener = object : InterstitialAdmobListener {
         override fun onAdDismiss() {
+            ECOLog.showLog("Dismiss")
             interstitialAd.preloadInterstitialAd()
             openMainActivity()
             setLoadingState(false)
+            cooldownAd.startCooldown()
             admobOpenAppManager.unlock()
         }
 
