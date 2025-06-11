@@ -16,6 +16,7 @@ class AdmobReward(private val context: Context) {
     var listener: RewardListener? = null
     private var rewardedAd: RewardedAd? = null
     private var isLoading = false
+    private var isError = false
 
 
     fun preloadRewardAd() {
@@ -29,7 +30,11 @@ class AdmobReward(private val context: Context) {
         return rewardedAd != null && !isLoading
     }
 
-    fun isLoading() : Boolean {
+    fun isAdError(): Boolean {
+        return isError
+    }
+
+    fun isLoading(): Boolean {
         //ECOLog.showLog("$rewardedAd - $isLoading")
         return rewardedAd == null && isLoading
     }
@@ -57,12 +62,14 @@ class AdmobReward(private val context: Context) {
         ECOLog.showLog("Quảng cáo reward đã được tải thành công")
         rewardedAd = ad
         isLoading = false
+        isError = false
         listener?.onAdLoaded()
     }
 
     private fun setStateOnAdFailedToLoad(error: LoadAdError) {
         rewardedAd = null
         isLoading = false
+        isError = true
         ECOLog.showLog("Tải quảng cáo reward thất bại - Error Message: ${error.message}")
         listener?.onAdFailedToLoad(error.message)
     }
@@ -81,10 +88,6 @@ class AdmobReward(private val context: Context) {
                 ECOLog.showLog("Hiển thị quảng cáo reward thất bại - Error Message: ${adError.message}")
                 setStateOnAdFailedToShowFullScreenContent(adError)
             }
-
-            override fun onAdShowedFullScreenContent() {
-                setStateOnAdShowedFullScreenContent()
-            }
         }
         rewardedAd?.show(activity, OnUserEarnedRewardListener {})
     }
@@ -93,22 +96,22 @@ class AdmobReward(private val context: Context) {
     private fun setStateOnAdDismissedFullScreenContent() {
         rewardedAd = null
         isLoading = false
-        listener?.onAdDismiss()
+        isError = false
+        listener?.onShowFullScreen(true)
     }
 
     private fun setStateOnAdFailedToShowFullScreenContent(adError: AdError) {
         rewardedAd = null
         isLoading = false
-        listener?.onFailedToShow(adError.message)
-    }
-
-    private fun setStateOnAdShowedFullScreenContent() {
-        listener?.onShowed()
+        isError = false
+        listener?.onShowFullScreen(false)
     }
 
     fun destroyAd() {
+        rewardedAd?.fullScreenContentCallback = null
         rewardedAd = null
         isLoading = false
+        isError = false
     }
 }
 
