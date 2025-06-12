@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.drawable.toDrawable
+import com.eco.iconchanger.theme.widget.utils.ECOLog
 import com.example.openappads.R
 
 class DialogAdsFullScreen(context: Context) : AlertDialog(context) {
-    private var dialog: DialogAdsFullScreen? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,10 +19,12 @@ class DialogAdsFullScreen(context: Context) : AlertDialog(context) {
     }
 
     fun showDialog() {
-        if(isShowing) dialog?.show()
+        if(!isShowing) {
+            show()
+        }
     }
 
     fun hideDialog() {
-        dialog?.dismiss()
+        dismiss()
     }
 }

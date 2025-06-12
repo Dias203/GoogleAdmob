@@ -42,7 +42,7 @@ class SecondActivity : BaseActivity(){
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        setLoadingState(true)
+        dialogAdsFullScreen.showDialog()
         admobOpenAppManager.locked()
         showAdWithTimeout(6, interstitialAd) {
             if(interstitialAd.isAdReady()) {

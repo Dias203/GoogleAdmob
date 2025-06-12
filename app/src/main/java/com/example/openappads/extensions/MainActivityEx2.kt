@@ -37,10 +37,10 @@ fun MainActivity.setOnClick() {
                 openSecondActivity()
             }
             else {
-                setLoadingState(true)
+                dialogAdsFullScreen.showDialog()
                 registerListenerRewardInters()
                 showAdWithTimeout(6, rewardInterstitialAd) {
-                    setLoadingState(false)
+                    dialogAdsFullScreen.hideDialog()
                     if (rewardInterstitialAd.isAdReady()) {
                         rewardInterstitialAd.showAd(this@setOnClick)
                     } else {
@@ -64,7 +64,7 @@ fun MainActivity.registerListenerRewardInters() {
         }
 
         override fun onShowFullScreen(isDismiss: Boolean) {
-            setLoadingState(false)
+            dialogAdsFullScreen.hideDialog()
             openSecondActivity()
             rewardInterstitialAd.preloadRewardIntersAd()
             admobOpenAppManager.unlock()
@@ -96,33 +96,36 @@ fun MainActivity.showDialogReward() {
 
 fun MainActivity.showRewardAd() {
     admobOpenAppManager.locked()
-    setLoadingState(true)
-    rewardAd.listener = object : RewardListener {
-        override fun onAdLoaded() {}
-        override fun onAdFailedToLoad(error: String) {}
-
-        override fun onShowFullScreen(isDismiss: Boolean) {
-            if(isDismiss) {
-                setLoadingState(false)
-                showToast("Mở khóa thành công!")
-                rewardAd.preloadRewardAd()
-                admobOpenAppManager.unlock()
-            }
-            else {
-                setLoadingState(false)
-                showToast("Không thể tải quảng cáo!")
-                admobOpenAppManager.unlock()
-            }
-        }
-    }
+    dialogAdsFullScreen.showDialog()
+    registerListenerReward()
     showAdWithTimeout(6, rewardAd) {
-        setLoadingState(false)
+        dialogAdsFullScreen.hideDialog()
         if(rewardAd.isAdReady()) {
             rewardAd.showAd(this@showRewardAd)
         }
         else {
             showToast("Lỗi quảng cáo")
             admobOpenAppManager.unlock()
+        }
+    }
+}
+
+private fun MainActivity.registerListenerReward() {
+    rewardAd.listener = object : RewardListener {
+        override fun onAdLoaded() {}
+        override fun onAdFailedToLoad(error: String) {}
+
+        override fun onShowFullScreen(isDismiss: Boolean) {
+            if (isDismiss) {
+                dialogAdsFullScreen.hideDialog()
+                showToast("Mở khóa thành công!")
+                rewardAd.preloadRewardAd()
+                admobOpenAppManager.unlock()
+            } else {
+                dialogAdsFullScreen.hideDialog()
+                showToast("Không thể tải quảng cáo!")
+                admobOpenAppManager.unlock()
+            }
         }
     }
 }
@@ -160,18 +163,6 @@ fun MainActivity.onActivityDestroyed() {
     rewardAd.destroyAd()
     rewardInterstitialAd.destroyAd()
     bannerAd.onDestroy()
-}
-
-private fun MainActivity.setLoadingState(isLoading: Boolean) {
-
-    binding.apply {
-        loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        bgMain.setBackgroundColor(
-            if (isLoading) Color.parseColor("#8C8B8B") else Color.WHITE
-        )
-        admobRewardVideoButton.isEnabled = !isLoading
-        openSecondActivity.isEnabled = !isLoading
-    }
 }
 
 private fun MainActivity.showToast(message: String) {

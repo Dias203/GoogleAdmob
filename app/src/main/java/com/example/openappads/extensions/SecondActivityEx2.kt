@@ -28,10 +28,12 @@ fun SecondActivity.setOnClick() {
         if(!interstitialAd.finishCoolOffTime()) {
             openMainActivity()
         } else {
-            setLoadingState(true)
+            //setLoadingState(true)
+            dialogAdsFullScreen.showDialog()
             registerListenerInterstitial()
             showAdWithTimeout(6, interstitialAd) {
-                setLoadingState(false)
+                //setLoadingState(false)
+                dialogAdsFullScreen.hideDialog()
                 if (interstitialAd.isAdReady()) {
                     interstitialAd.showAd(this)
                 } else {
@@ -54,14 +56,14 @@ fun SecondActivity.registerListenerInterstitial(){
         override fun onAdDismiss() {
             interstitialAd.preloadInterstitialAd()
             openMainActivity()
-            setLoadingState(false)
+            dialogAdsFullScreen.hideDialog()
             admobOpenAppManager.unlock()
         }
 
         override fun onAdLoaded() {}
         override fun onFailedAdLoad(error: String) {
             openMainActivity()
-            setLoadingState(false)
+            dialogAdsFullScreen.hideDialog()
         }
 
         override fun onFailedToShow(error: String) {

@@ -8,6 +8,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.openappads.admob.interstitial.AdmobInterstitial
 import com.example.openappads.admob.reward.AdmobReward
 import com.example.openappads.admob.reward_interstitial.AdmobRewardInterstitial
+import com.example.openappads.utils.DialogAdsFullScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -16,6 +17,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 open class BaseActivity : AppCompatActivity() {
+
+    val dialogAdsFullScreen by lazy { DialogAdsFullScreen(this) }
 
     fun showAdWithTimeout(seconds: Int, condition: Any, onComplete: () -> Unit) {
         var job: Job? = null
