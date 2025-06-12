@@ -40,4 +40,12 @@ class MyApplication : MultiDexApplication(), Application.ActivityLifecycleCallba
     override fun onActivityDestroyed(activity: Activity) {
         admobAppOpenManager.onActivityDestroyed(activity)
     }
+
+    /*fun showAdIfAvailable(activity: Activity, onShowAdCompleteListener: OpenAppApplication.OnShowAdCompleteListener) {
+        openAppAdManager.showAdIfAvailable(activity, onShowAdCompleteListener)
+    }
+
+    fun loadAdWithCallback(activity: Activity, onLoaded: () -> Unit) {
+        openAppAdManager.loadAdWithCallback(activity, onLoaded)
+    }*/
 }
