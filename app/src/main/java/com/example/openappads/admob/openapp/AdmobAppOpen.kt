@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.ViewGroup
 import com.eco.iconchanger.theme.widget.utils.ECOLog
+import com.example.openappads.utils.CoolOffTime
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -23,6 +24,10 @@ class AdmobAppOpen(private val context: Context) {
 
     fun setAdUnitId(id: String) {
         this.adUnitId = id
+    }
+
+    fun finishCoolOffTime() : Boolean {
+        return CoolOffTime.finnishCoolOffTime()
     }
 
     fun loadAd() {
@@ -48,9 +53,9 @@ class AdmobAppOpen(private val context: Context) {
     }
 
     fun showAdIfAvailable(activity: Activity, complete: (() -> Unit)) {
-        if (isShowingAd) {
-            return
-        }
+        if (isShowingAd) return
+
+        if(!finishCoolOffTime()) return
 
         appOpenAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {

@@ -2,6 +2,7 @@ package com.example.openappads.screens
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.openappads.R
@@ -37,7 +38,8 @@ class SplashActivity : AppCompatActivity(), ProgressUpdated {
 
     override fun onProgressUpdated(count: Int) {
         if (admobAppOpen.isShowing()) return
-        findViewById<TextView>(R.id.timer).text = count.toString()
+        //findViewById<TextView>(R.id.timer).text = count.toString()
+        findViewById<ProgressBar>(R.id.loadingBar).progress = count
 
         if(coroutineCountDown.isProgressMax()){
             startMainActivity()

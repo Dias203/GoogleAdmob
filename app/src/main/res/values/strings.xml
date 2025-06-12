@@ -17,4 +17,5 @@
     <string name="open_secondActivity">Chỉnh sửa ảnh</string>
     <string name="ad_attribution" translatable="false">Ad</string>
     <string name="show_ads">Show ads</string>
+    <string name="tv_may_display_ads">Hành động này có thể sẽ hiện quảng cáo</string>
 </resources>

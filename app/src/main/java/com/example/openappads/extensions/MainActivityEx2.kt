@@ -2,7 +2,6 @@ package com.example.openappads.extensions
 
 import android.content.Intent
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -11,100 +10,70 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.eco.iconchanger.theme.widget.utils.ECOLog
 import com.example.openappads.admob.banner.BannerListener
+import com.example.openappads.admob.interstitial.AdmobInterstitial
+import com.example.openappads.admob.reward.AdmobReward
 import com.example.openappads.admob.reward.RewardListener
+import com.example.openappads.admob.reward_interstitial.AdmobRewardInterstitial
 import com.example.openappads.admob.reward_interstitial.RewardInterstitialAdmobListener
 import com.example.openappads.screens.MainActivity
 import com.example.openappads.screens.SecondActivity
-import com.example.openappads.utils.CountDownTimer
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 fun MainActivity.setOnClick() {
     binding.apply {
-        admobRewardVideoButton.setOnClickListener { handleRewardVideoClick() }
-        openSecondActivity.setOnClickListener { showRewardInterstitial() }
+        admobRewardVideoButton.setOnClickListener {
+            handleRewardVideoClick()
+        }
+
+        openSecondActivity.setOnClickListener {
+            rewardInterstitialAd.preloadRewardIntersAd()
+            admobOpenAppManager.locked()
+            if(!rewardInterstitialAd.finishCoolOffTime()){
+                openSecondActivity()
+            }
+            else {
+                dialogAdsFullScreen.showDialog()
+                registerListenerRewardInters()
+                showAdWithTimeout(6, rewardInterstitialAd) {
+                    dialogAdsFullScreen.hideDialog()
+                    if (rewardInterstitialAd.isAdReady()) {
+                        rewardInterstitialAd.showAd(this@setOnClick)
+                    } else {
+                        openSecondActivity()
+                        admobOpenAppManager.unlock()
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun MainActivity.registerListenerRewardInters() {
+    rewardInterstitialAd.listener = object : RewardInterstitialAdmobListener {
+        override fun onAdLoaded() {
+            ECOLog.showLog("Ad loaded successfully")
+        }
+
+        override fun onFailedAdLoad(error: String) {
+            ECOLog.showLog("Ad load failed: $error")
+        }
+
+        override fun onShowFullScreen(isDismiss: Boolean) {
+            dialogAdsFullScreen.hideDialog()
+            openSecondActivity()
+            rewardInterstitialAd.preloadRewardIntersAd()
+            admobOpenAppManager.unlock()
+        }
     }
 }
 
 private fun MainActivity.handleRewardVideoClick() {
     showDialogReward()
-}
-
-fun MainActivity.showRewardAd(){
-    setLoadingState(true)
-    admobOpenAppManager.locked()
-    listenerRewardAd()
-
-    isAdRequest = true
-    setLoadingState(true)
-    admobOpenAppManager.locked()
-
-    if (rewardAd.isAdReady()) {
-        // TH1: Ad loaded → timeout 1s rồi show
-        ECOLog.showLog("Truong hop 1")
-        startTimeout(1) {
-            rewardAd.showAd(this)
-            isAdRequest = false
-            showToast("Hiển thị thành công khi loaded timeout 1s")
-            hideIfNotShowing()
-        }
-    } else if (rewardAd.isLoading()) {
-        admobOpenAppManager.locked()
-        ECOLog.showLog("Truong hop 2")
-        // TH2: đang loading → timeout 3s, nếu kịp thì show
-        startTimeout(3) {
-            if (rewardAd.isAdReady()) {
-                admobOpenAppManager.locked()
-                ECOLog.showLog( "TH2 THANH CONG " + rewardAd.isAdReady())
-                showToast("Hiển thị thành công khi loading timeout 3s")
-                rewardAd.showAd(this)
-                isAdRequest = false
-            } else {
-                ECOLog.showLog( "TH2 THAT BAI " + rewardAd.isAdReady())
-                showToast("Tải quảng cáo thất bại")
-                hideIfNotShowing()
-            }
-        }
-    } else {
-        // TH3: fail → tiếp tục
-        showToast("Không thể tải quảng cáo!")
-        hideIfNotShowing()
-    }
-}
-
-private fun MainActivity.listenerRewardAd() {
-    rewardAd.listener = object : RewardListener {
-        override fun onAdLoaded() {}
-
-        override fun onAdFailedToLoad(error: String) {
-            setLoadingState(false)
-            showToast("Không thể tải quảng cáo!")
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onAdDismiss() {
-            setLoadingState(false)
-            showToast("Mở khóa thành công!")
-            rewardAd.preloadRewardAd()
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onFailedToShow(error: String) {
-            setLoadingState(false)
-            showToast("Không thể hiển thị quảng cáo!")
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onShowed() {
-            TODO("Not yet implemented")
-        }
-    }
-}
-
-fun MainActivity.hideIfNotShowing() {
-    setLoadingState(false)
-    countDownTimer.stopJob()
 }
 
 fun MainActivity.showDialogReward() {
@@ -125,82 +94,47 @@ fun MainActivity.showDialogReward() {
 }
 
 
+fun MainActivity.showRewardAd() {
+    admobOpenAppManager.locked()
+    dialogAdsFullScreen.showDialog()
+    registerListenerReward()
+    showAdWithTimeout(6, rewardAd) {
+        dialogAdsFullScreen.hideDialog()
+        if(rewardAd.isAdReady()) {
+            rewardAd.showAd(this@showRewardAd)
+        }
+        else {
+            showToast("Lỗi quảng cáo")
+            admobOpenAppManager.unlock()
+        }
+    }
+}
 
-private fun MainActivity.openSecondActivity(){
+private fun MainActivity.registerListenerReward() {
+    rewardAd.listener = object : RewardListener {
+        override fun onAdLoaded() {}
+        override fun onAdFailedToLoad(error: String) {}
+
+        override fun onShowFullScreen(isDismiss: Boolean) {
+            if (isDismiss) {
+                dialogAdsFullScreen.hideDialog()
+                showToast("Mở khóa thành công!")
+                rewardAd.preloadRewardAd()
+                admobOpenAppManager.unlock()
+            } else {
+                dialogAdsFullScreen.hideDialog()
+                showToast("Không thể tải quảng cáo!")
+                admobOpenAppManager.unlock()
+            }
+        }
+    }
+}
+
+private fun MainActivity.openSecondActivity() {
     val intentAd = Intent(this, SecondActivity::class.java).apply {
         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
     startActivity(intentAd)
-}
-
-fun MainActivity.showRewardInterstitial(){
-    isAdRequest = true
-    setLoadingState(true)
-    admobOpenAppManager.locked()
-    listenerRewardIntersAd()
-
-    if (rewardInterstitialAd.isAdReady()) {
-        // TH1: Ad loaded → timeout 1s rồi show
-        ECOLog.showLog("Truong hop 1")
-        startTimeout(1) {
-            rewardInterstitialAd.showAd(this)
-            isAdRequest = false
-            showToast("Hiển thị thành công khi loaded timeout 1s")
-            hideIfNotShowing()
-        }
-    } else if (rewardInterstitialAd.isLoading()) {
-        admobOpenAppManager.locked()
-        ECOLog.showLog("Truong hop 2")
-        // TH2: đang loading → timeout 3s, nếu kịp thì show
-        startTimeout(3) {
-            if (rewardInterstitialAd.isAdReady()) {
-                admobOpenAppManager.locked()
-                ECOLog.showLog( "TH2 THANH CONG " + rewardInterstitialAd.isAdReady())
-                showToast("Hiển thị thành công khi loading timeout 3s")
-                rewardInterstitialAd.showAd(this)
-                isAdRequest = false
-            } else {
-                ECOLog.showLog( "TH2 THAT BAI " + rewardInterstitialAd.isAdReady())
-                showToast("Tải quảng cáo thất bại")
-                hideIfNotShowing()
-                openSecondActivity()
-            }
-        }
-    } else {
-        // TH3: fail → tiếp tục
-        showToast("Không thể tải quảng cáo!")
-        hideIfNotShowing()
-        openSecondActivity()
-    }
-}
-
-private fun MainActivity.listenerRewardIntersAd() {
-    rewardInterstitialAd.listener = object : RewardInterstitialAdmobListener {
-        override fun onAdDismiss() {
-            openSecondActivity()
-            setLoadingState(false)
-            rewardInterstitialAd.preloadRewardIntersAd()
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onAdLoaded() {}
-
-        override fun onFailedAdLoad(error: String) {
-            openSecondActivity()
-            setLoadingState(false)
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onFailedToShow(error: String) {
-            openSecondActivity()
-            setLoadingState(false)
-            admobOpenAppManager.unlock()
-        }
-
-        override fun onShowed() {
-            TODO("Not yet implemented")
-        }
-    }
 }
 
 fun MainActivity.loadAdMob() {
@@ -222,60 +156,7 @@ fun MainActivity.loadAdMob() {
     }
 
     rewardAd.preloadRewardAd()
-    rewardInterstitialAd.preloadRewardIntersAd()
 }
-
-fun MainActivity.startTimeout(timeoutSec: Int, onComplete: () -> Unit) {
-    countDownTimer.setProcessTimeSecond(timeoutSec)
-    countDownTimer.startJob(object : CountDownTimer.UpdateProgress {
-        override fun onUpdateProgress(count: Int) {
-            if (countDownTimer.isProgressMax()) {
-                onComplete()
-            }
-        }
-    })
-}
-
-
-fun MainActivity.progressUpdatedReward(){
-    if (countDownTimer.isProgressMax()) {
-        if (rewardAd.isAdReady()) {
-            rewardAd.showAd(this)
-            isAdRequest = false
-        } else {
-            ECOLog.showLog("Quảng cáo chưa sẵn sàng!")
-            countDownTimer.stopJob()
-        }
-        return
-    }
-    if (rewardAd.isAdReady()) {
-        countDownTimer.stopJob()
-        rewardAd.showAd(this)
-        isAdRequest= false
-    }
-}
-
-fun MainActivity.progressUpdatedRewardInterstitial(){
-    ECOLog.showLog("13112003")
-    if (countDownTimer.isProgressMax()) {
-        ECOLog.showLog("12345")
-        if (rewardInterstitialAd.isAdReady()) {
-            rewardInterstitialAd.showAd(this)
-            isAdRequest = false
-        } else {
-            ECOLog.showLog("Quảng cáo chưa sẵn sàng!")
-            countDownTimer.stopJob()
-        }
-        return
-    }
-    if (rewardInterstitialAd.isAdReady()) {
-        ECOLog.showLog("678910")
-        rewardInterstitialAd.showAd(this)
-        countDownTimer.stopJob()
-        isAdRequest= false
-    }
-}
-
 
 fun MainActivity.onActivityDestroyed() {
     rewardAd.destroyAd()
@@ -283,21 +164,60 @@ fun MainActivity.onActivityDestroyed() {
     bannerAd.onDestroy()
 }
 
-private fun MainActivity.setLoadingState(isLoading: Boolean) {
-
-    binding.apply {
-        loadingProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        bgMain.setBackgroundColor(
-            if (isLoading) Color.parseColor("#8C8B8B") else Color.WHITE
-        )
-        admobRewardVideoButton.isEnabled = !isLoading
-        openSecondActivity.isEnabled = !isLoading
-    }
-}
-
 private fun MainActivity.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
 
+//fun MainActivity.showAdWithTimeout(
+//    seconds: Int,
+//    condition: Any,
+//    onComplete: () -> Unit
+//) {
+//    ECOLog.showLog("Come here")
+//    var progress = 0
+//    val delayTime = ((seconds * 1000) / 100).toLong()
+//    var isCompleted = false
+//    var job: Job? = null
+//
+//    job = lifecycleScope.launch {
+//        repeatOnLifecycle(Lifecycle.State.RESUMED) {
+//            ECOLog.showLog("Come here - 2")
+//
+//            while (isActive && progress <= 100 && !isCompleted) {
+//                ECOLog.showLog("Come here - 3, progress: $progress")
+//                val isReady = when (condition) {
+//                    is AdmobReward -> condition.isAdReady() || condition.isError()
+//                    is AdmobRewardInterstitial -> condition.isAdReady() || condition.isError()
+//                    is AdmobInterstitial -> condition.isAdReady() || condition.isError()
+//                    else -> false
+//                }
+//                // Loaded -> timeout 1s
+//                if (isReady && progress >= 20) {
+//                    ECOLog.showLog("Come here - 4: Ad ready, showing ad")
+//                    isCompleted = true
+//                    onComplete()
+//                    break
+//                }
+//
+//                // Loading -> timeout 3s
+//                if (!isReady && progress >= 50) {
+//                    ECOLog.showLog("Come here - Loading timeout 3s, continue flow")
+//                    isCompleted = true
+//                    onComplete()
+//                    break
+//                }
+//
+//                delay(delayTime)
+//                progress++
+//            }
+//
+//            if (!isCompleted) {
+//                ECOLog.showLog("Come here - 5: Total timeout, continue flow")
+//                onComplete()
+//            }
+//        }
+//        job?.cancel()
+//    }
+//}
 

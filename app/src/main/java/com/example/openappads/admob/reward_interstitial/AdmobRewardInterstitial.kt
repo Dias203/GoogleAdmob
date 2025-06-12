@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.eco.iconchanger.theme.widget.utils.ECOLog
 import com.example.openappads.constants.admob.ADS_REWARD_INTERSTITIAL_AD
+import com.example.openappads.utils.CoolOffTime
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -16,7 +17,8 @@ class AdmobRewardInterstitial(private val context: Context) {
     var listener: RewardInterstitialAdmobListener? = null
     private var rewardedInterstitialAd: RewardedInterstitialAd? = null
     private var isLoading = false
-    private var isLoaded = false
+    private var isError = false
+
 
 
     fun preloadRewardIntersAd() {
@@ -30,13 +32,15 @@ class AdmobRewardInterstitial(private val context: Context) {
         return rewardedInterstitialAd != null && !isLoading
     }
 
-    fun isLoading() : Boolean {
-        ECOLog.showLog("$rewardedInterstitialAd - $isLoading")
-        return rewardedInterstitialAd == null && isLoading
+    fun isError() : Boolean {
+        return isError
     }
 
+    fun finishCoolOffTime() : Boolean{
+        return CoolOffTime.finnishCoolOffTime()
+    }
 
-    fun loadAd() {
+    private fun loadAd() {
         if (rewardedInterstitialAd != null || isLoading) return
 
         isLoading = true
@@ -61,23 +65,25 @@ class AdmobRewardInterstitial(private val context: Context) {
         ECOLog.showLog("Quảng cáo rewardedInterstitialAd đã được tải thành công")
         rewardedInterstitialAd = ad
         isLoading = false
-        isLoaded = true
+        isError = false
         listener?.onAdLoaded()
     }
 
     private fun setStateOnAdFailedToLoad(error: LoadAdError) {
         rewardedInterstitialAd = null
         isLoading = false
-
+        isError = true
         ECOLog.showLog("Tải quảng cáo rewardedInterstitialAd thất bại - Error Message: ${error.message}")
         listener?.onFailedAdLoad(error.message)
     }
 
 
+
     fun showAd(activity: AppCompatActivity) {
         if (!isAdReady()) return
-        ECOLog.showLog("SHOW AD")
+        if(!finishCoolOffTime()) return
 
+        ECOLog.showLog("SHOW AD")
         rewardedInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
                 ECOLog.showLog("Dismiss12312313")
@@ -89,9 +95,6 @@ class AdmobRewardInterstitial(private val context: Context) {
                 setStateOnAdFailedToShowFullScreenContent(adError)
             }
 
-            override fun onAdShowedFullScreenContent() {
-                setStateOnAdShowedFullScreenContent()
-            }
         }
         rewardedInterstitialAd?.show(activity, OnUserEarnedRewardListener{})
     }
@@ -100,22 +103,24 @@ class AdmobRewardInterstitial(private val context: Context) {
     private fun setStateOnAdDismissedFullScreenContent() {
         rewardedInterstitialAd = null
         isLoading = false
-        listener?.onAdDismiss()
+        isError = false
+        CoolOffTime.setLastTimeAdsShow()
+        listener?.onShowFullScreen(true)
     }
 
     private fun setStateOnAdFailedToShowFullScreenContent(adError: AdError) {
         rewardedInterstitialAd = null
         isLoading = false
-        listener?.onFailedToShow(adError.message)
+        isError = false
+        listener?.onShowFullScreen(false)
     }
 
-    private fun setStateOnAdShowedFullScreenContent() {
-        listener?.onShowed()
-    }
 
     fun destroyAd() {
+        rewardedInterstitialAd?.fullScreenContentCallback = null
         rewardedInterstitialAd = null
         isLoading = false
+        isError = false
     }
 
 

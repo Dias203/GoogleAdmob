@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.eco.iconchanger.theme.widget.utils.ECOLog
 import com.example.openappads.constants.admob.ADS_INTERSTITIAL_UNIT_ID
+import com.example.openappads.utils.CoolOffTime
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -15,6 +16,7 @@ class AdmobInterstitial(private val context: Context) {
     var listener: InterstitialAdmobListener? = null
     private var interstitialAd: InterstitialAd? = null
     private var isLoading = false
+    private var isError = false
 
 
     fun preloadInterstitialAd() {
@@ -33,7 +35,15 @@ class AdmobInterstitial(private val context: Context) {
         return interstitialAd == null && isLoading
     }
 
-    fun loadAd() {
+    fun isError() : Boolean {
+        return isError
+    }
+
+    fun finishCoolOffTime(): Boolean {
+        return CoolOffTime.finnishCoolOffTime()
+    }
+
+    private fun loadAd() {
         if (interstitialAd != null || isLoading) return
 
         isLoading = true
@@ -56,13 +66,14 @@ class AdmobInterstitial(private val context: Context) {
         ECOLog.showLog("Quảng cáo interstitial đã được tải thành công")
         interstitialAd = ad
         isLoading = false
+        isError = false
         listener?.onAdLoaded()
     }
 
     private fun setStateOnAdFailedToLoad(error: LoadAdError) {
         interstitialAd = null
         isLoading = false
-
+        isError = true
         ECOLog.showLog("Tải quảng cáo interstitial thất bại - Error Message: ${error.message}")
         listener?.onFailedAdLoad(error.message)
     }
@@ -70,6 +81,8 @@ class AdmobInterstitial(private val context: Context) {
 
     fun showAd(activity: AppCompatActivity) {
         if (!isAdReady()) return
+
+        if(!finishCoolOffTime()) return
 
 
         interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
@@ -93,12 +106,14 @@ class AdmobInterstitial(private val context: Context) {
     private fun setStateOnAdDismissedFullScreenContent() {
         interstitialAd = null
         isLoading = false
+        isError = false
         listener?.onAdDismiss()
     }
 
     private fun setStateOnAdFailedToShowFullScreenContent(adError: AdError) {
         interstitialAd = null
         isLoading = false
+        isError = false
         listener?.onFailedToShow(adError.message)
     }
 
@@ -107,8 +122,10 @@ class AdmobInterstitial(private val context: Context) {
     }
 
     fun destroyAd() {
+        interstitialAd?.fullScreenContentCallback = null
         interstitialAd = null
         isLoading = false
+        isError = false
     }
 
 

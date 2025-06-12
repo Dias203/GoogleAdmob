@@ -57,14 +57,20 @@
         android:layout_marginTop="@dimen/_210sdp"
         android:layout_height="0dp"
         android:padding="@dimen/_1sdp"
+<<<<<<< HEAD
         android:backgroundTint="#92000000"
         android:background="@drawable/bg_ad"
+=======
+        android:background="@drawable/bg_ad"
+        android:backgroundTint="#81000000"
+>>>>>>> 3dabc6989238e9e521fcd78bca164fa8cdb3bee6
         android:gravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/openSecondActivity">
 
+<<<<<<< HEAD
         <ProgressBar
             android:id="@+id/loadingProgressBarBanner"
             android:layout_width="@dimen/_50sdp"
@@ -74,6 +80,19 @@
             android:elevation="@dimen/_10sdp"
             android:visibility="visible" />
     </FrameLayout>
+=======
+    <ProgressBar
+        android:id="@+id/loadingProgressBarBanner"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:elevation="@dimen/_10sdp"
+        android:visibility="visible"
+        android:indeterminateTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/adBannerContainer"
+        app:layout_constraintEnd_toEndOf="@id/adBannerContainer"
+        app:layout_constraintStart_toStartOf="@+id/adBannerContainer"
+        app:layout_constraintTop_toTopOf="@id/adBannerContainer" />
+>>>>>>> 3dabc6989238e9e521fcd78bca164fa8cdb3bee6
 
     <FrameLayout
         android:background="#AA000000"
