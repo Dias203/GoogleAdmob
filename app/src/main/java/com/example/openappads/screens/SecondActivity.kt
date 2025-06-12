@@ -5,11 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-<<<<<<< HEAD
-import androidx.lifecycle.lifecycleScope
-=======
 import com.example.openappads.BaseActivity
->>>>>>> 3dabc6989238e9e521fcd78bca164fa8cdb3bee6
 import com.example.openappads.MyApplication
 import com.example.openappads.R
 import com.example.openappads.admob.banner.BannerAd
@@ -21,12 +17,6 @@ import com.example.openappads.extensions.onActivityDestroyed
 import com.example.openappads.extensions.openMainActivity
 import com.example.openappads.extensions.setLoadingState
 import com.example.openappads.extensions.setOnClick
-<<<<<<< HEAD
-import com.example.openappads.extensions.showInterstitialAd
-import com.example.openappads.utils.CooldownManager
-import com.example.openappads.utils.CountDownTimer
-=======
->>>>>>> 3dabc6989238e9e521fcd78bca164fa8cdb3bee6
 
 class SecondActivity : BaseActivity(){
     lateinit var binding: ActivitySecondBinding
@@ -36,13 +26,6 @@ class SecondActivity : BaseActivity(){
     val admobOpenAppManager by lazy {
         (applicationContext as MyApplication).admobAppOpenManager
     }
-<<<<<<< HEAD
-    val handler = Handler(Looper.getMainLooper())
-    var isAdRequest = false
-    val countDownTimer by lazy { CountDownTimer() }
-    val cooldownAd by lazy { CooldownManager(lifecycleScope) }
-=======
->>>>>>> 3dabc6989238e9e521fcd78bca164fa8cdb3bee6
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -116,6 +116,45 @@ class NativeAdmob(private val context: Context) {
         adLoader.loadAd(AdRequest.Builder().build())
     }
 
+    fun loadAd(bind: (ad: NativeAd) -> Unit) {
+        val builder = AdLoader.Builder(context, ADS_NATIVE_UNIT_ID)
+            .forNativeAd {
+                nativeAd?.destroy()
+                nativeAd = it
+                bind(it)
+                listener?.onAdLoaded()
+            }
+
+        val videoOptions = VideoOptions.Builder().setStartMuted(false).build()
+        val adOptions = NativeAdOptions.Builder().setMediaAspectRatio(MediaAspectRatio.PORTRAIT)
+            .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT).build()
+        /*val adOptions = NativeAdOptions.Builder()
+            .setVideoOptions(videoOptions)
+            .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT)
+            .build()*/
+
+        val adLoader = builder.withAdListener(object : AdListener() {
+            // Lắng nghe sự kiện theo dõi quảng cáo
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                listener?.onAdLoaded()
+            }
+
+            override fun onAdFailedToLoad(error: LoadAdError) {
+                super.onAdFailedToLoad(error)
+                listener?.onFailedAdLoad(error.message)
+            }
+
+            override fun onAdClicked() {
+                super.onAdClicked()
+            }
+        })
+            .withNativeAdOptions(adOptions) // -> Đặt các tùy chọn cho quảng cáo gốc
+            .build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
+    }
+
     fun onDestroy() {
         nativeAd?.destroy()
     }

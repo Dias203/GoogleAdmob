@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_back"/>
 
-    <FrameLayout
+    <com.example.openappads.admob.nativead.NativeView250
         android:id="@+id/ad_frame"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

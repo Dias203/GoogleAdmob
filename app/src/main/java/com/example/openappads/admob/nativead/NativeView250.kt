@@ -14,12 +14,14 @@ class NativeView250 @JvmOverloads constructor(
 
     var binding: AdUnifiedBinding? = null
     init {
-        binding = AdUnifiedBinding.inflate(LayoutInflater.from(context), this, false)
+        binding = AdUnifiedBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
 
     fun loaded(nativeAd: NativeAd) {
         binding?.let {unifiedAdBinding ->
+
+            val nativeView = unifiedAdBinding.root
 
             unifiedAdBinding.root.mediaView = unifiedAdBinding.adMedia
 

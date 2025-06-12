@@ -23,12 +23,6 @@ import kotlinx.coroutines.launch
 
 fun SecondActivity.setOnClick() {
     binding.icBack.setOnClickListener {
-<<<<<<< HEAD
-        cooldownAd.tryShowAd {
-            interstitialAd.showAd(this)
-        }
-        //showInterstitialAd()
-=======
         admobOpenAppManager.locked()
         interstitialAd.preloadInterstitialAd()
         if(!interstitialAd.finishCoolOffTime()) {
@@ -47,7 +41,6 @@ fun SecondActivity.setOnClick() {
                 }
             }
         }
->>>>>>> 3dabc6989238e9e521fcd78bca164fa8cdb3bee6
     }
 }
 
@@ -61,15 +54,9 @@ fun SecondActivity.openMainActivity(){
 fun SecondActivity.registerListenerInterstitial(){
     interstitialAd.listener = object : InterstitialAdmobListener {
         override fun onAdDismiss() {
-            ECOLog.showLog("Dismiss")
             interstitialAd.preloadInterstitialAd()
             openMainActivity()
-<<<<<<< HEAD
-            setLoadingState(false)
-            cooldownAd.startCooldown()
-=======
             dialogAdsFullScreen.hideDialog()
->>>>>>> 3dabc6989238e9e521fcd78bca164fa8cdb3bee6
             admobOpenAppManager.unlock()
         }
 
@@ -94,7 +81,9 @@ private fun SecondActivity.showToast(message: String) {
 fun SecondActivity.loadAdMob() {
     bannerAd.load(binding.adBannerContainer, true)
     interstitialAd.preloadInterstitialAd()
-    nativeAd.loadNativeAd(binding.adFrame)
+    nativeAd.loadAd {
+        binding.adFrame.loaded(it)
+    }
 }
 
 fun SecondActivity.onActivityDestroyed() {
