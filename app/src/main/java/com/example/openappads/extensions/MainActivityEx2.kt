@@ -17,10 +17,12 @@ import com.example.openappads.admob.reward_interstitial.AdmobRewardInterstitial
 import com.example.openappads.admob.reward_interstitial.RewardInterstitialAdmobListener
 import com.example.openappads.screens.MainActivity
 import com.example.openappads.screens.SecondActivity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 fun MainActivity.setOnClick() {
     binding.apply {
@@ -177,56 +179,55 @@ private fun MainActivity.showToast(message: String) {
 }
 
 
-fun MainActivity.showAdWithTimeout(
-    seconds: Int,
-    condition: Any,
-    onComplete: () -> Unit
-) {
-    ECOLog.showLog("Come here")
-    var progress = 0
-    val delayTime = ((seconds * 1000) / 100).toLong()
-    var isCompleted = false
-    var job: Job? = null
-
-    job = lifecycleScope.launch {
-        repeatOnLifecycle(Lifecycle.State.RESUMED) {
-            ECOLog.showLog("Come here - 2")
-
-            while (isActive && progress <= 100 && !isCompleted) {
-                ECOLog.showLog("Come here - 3, progress: $progress")
-                val isReady = when (condition) {
-                    is AdmobReward -> condition.isAdReady() || condition.isAdError()
-                    is AdmobRewardInterstitial -> condition.isAdReady() || condition.isError()
-                    is AdmobInterstitial -> condition.isAdReady() || condition.isError()
-                    else -> false
-                }
-                // Loaded -> timeout 1s
-                if (isReady && progress >= 20) {
-                    ECOLog.showLog("Come here - 4: Ad ready, showing ad")
-                    isCompleted = true
-                    onComplete()
-                    break
-                }
-
-                // Loading -> timeout 3s
-                if (!isReady && progress >= 50) {
-                    ECOLog.showLog("Come here - Loading timeout 3s, continue flow")
-                    isCompleted = true
-                    onComplete()
-                    break
-                }
-
-                delay(delayTime)
-                progress++
-            }
-
-            if (!isCompleted) {
-                ECOLog.showLog("Come here - 5: Total timeout, continue flow")
-                onComplete()
-            }
-        }
-        job?.cancel()
-    }
-}
-
+//fun MainActivity.showAdWithTimeout(
+//    seconds: Int,
+//    condition: Any,
+//    onComplete: () -> Unit
+//) {
+//    ECOLog.showLog("Come here")
+//    var progress = 0
+//    val delayTime = ((seconds * 1000) / 100).toLong()
+//    var isCompleted = false
+//    var job: Job? = null
+//
+//    job = lifecycleScope.launch {
+//        repeatOnLifecycle(Lifecycle.State.RESUMED) {
+//            ECOLog.showLog("Come here - 2")
+//
+//            while (isActive && progress <= 100 && !isCompleted) {
+//                ECOLog.showLog("Come here - 3, progress: $progress")
+//                val isReady = when (condition) {
+//                    is AdmobReward -> condition.isAdReady() || condition.isError()
+//                    is AdmobRewardInterstitial -> condition.isAdReady() || condition.isError()
+//                    is AdmobInterstitial -> condition.isAdReady() || condition.isError()
+//                    else -> false
+//                }
+//                // Loaded -> timeout 1s
+//                if (isReady && progress >= 20) {
+//                    ECOLog.showLog("Come here - 4: Ad ready, showing ad")
+//                    isCompleted = true
+//                    onComplete()
+//                    break
+//                }
+//
+//                // Loading -> timeout 3s
+//                if (!isReady && progress >= 50) {
+//                    ECOLog.showLog("Come here - Loading timeout 3s, continue flow")
+//                    isCompleted = true
+//                    onComplete()
+//                    break
+//                }
+//
+//                delay(delayTime)
+//                progress++
+//            }
+//
+//            if (!isCompleted) {
+//                ECOLog.showLog("Come here - 5: Total timeout, continue flow")
+//                onComplete()
+//            }
+//        }
+//        job?.cancel()
+//    }
+//}
 

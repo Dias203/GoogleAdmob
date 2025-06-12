@@ -1,0 +1,28 @@
+package com.example.openappads.utils
+
+import android.content.Context
+import android.graphics.Color
+import android.os.Bundle
+import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.graphics.drawable.toDrawable
+import com.example.openappads.R
+
+class DialogAdsFullScreen(context: Context) : AlertDialog(context) {
+    private var dialog: DialogAdsFullScreen? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.dialog_full_screen)
+        window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+    }
+
+    fun showDialog() {
+        if(isShowing) dialog?.show()
+    }
+
+    fun hideDialog() {
+        dialog?.dismiss()
+    }
+}

@@ -88,7 +88,6 @@ import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.eco.iconchanger.theme.widget.utils.ECOLog
 import com.example.openappads.constants.admob.ADS_OPEN_APP_UNIT_ID_DEFAULT
 import com.example.openappads.screens.SplashActivity
 import com.google.android.gms.ads.MobileAds
@@ -103,20 +102,7 @@ class AdmobAppOpenApplication(
     private val admobAppOpen by lazy {
         AdmobAppOpen(context).apply {
             setAdUnitId(ADS_OPEN_APP_UNIT_ID_DEFAULT)
-            listener = object : OpenAppAdListener {
-                override fun onAdLoaded() {
-                    //ECOLog.showLog("Ad loaded successfully")
-                }
-
-                override fun onFailedAdLoad(message: String) {
-                    //ECOLog.showLog("Ad failed to load: $message")
-                }
-
-                override fun onAdDismiss() {
-                    //ECOLog.showLog("Ad dismissed")
-                    loadAd()
-                }
-            }
+            registerListenerAppOpen()
         }
     }
 
@@ -144,6 +130,23 @@ class AdmobAppOpenApplication(
 
     fun unlock() {
         isLocked = false
+    }
+
+    fun registerListenerAppOpen() {
+        admobAppOpen.listener = object : OpenAppAdListener {
+            override fun onAdLoaded() {
+                //ECOLog.showLog("Ad loaded successfully")
+            }
+
+            override fun onFailedAdLoad(message: String) {
+                //ECOLog.showLog("Ad failed to load: $message")
+            }
+
+            override fun onAdDismiss() {
+                //ECOLog.showLog("Ad dismissed")
+                loadAd()
+            }
+        }
     }
 
 

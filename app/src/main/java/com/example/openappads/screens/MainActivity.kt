@@ -3,6 +3,7 @@ package com.example.openappads.screens
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.eco.iconchanger.theme.widget.utils.ECOLog
+import com.example.openappads.BaseActivity
 import com.example.openappads.MyApplication
 import com.example.openappads.admob.banner.BannerAd
 import com.example.openappads.admob.reward_interstitial.AdmobRewardInterstitial
@@ -11,9 +12,8 @@ import com.example.openappads.databinding.ActivityMainBinding
 import com.example.openappads.extensions.loadAdMob
 import com.example.openappads.extensions.onActivityDestroyed
 import com.example.openappads.extensions.setOnClick
-import com.example.openappads.utils.CountDownTimer
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : BaseActivity() {
     internal lateinit var binding: ActivityMainBinding
 
     val bannerAd by lazy { BannerAd(applicationContext) }

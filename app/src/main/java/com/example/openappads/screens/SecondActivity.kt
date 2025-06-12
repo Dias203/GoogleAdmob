@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.openappads.BaseActivity
 import com.example.openappads.MyApplication
 import com.example.openappads.R
 import com.example.openappads.admob.banner.BannerAd
@@ -16,9 +17,8 @@ import com.example.openappads.extensions.onActivityDestroyed
 import com.example.openappads.extensions.openMainActivity
 import com.example.openappads.extensions.setLoadingState
 import com.example.openappads.extensions.setOnClick
-import com.example.openappads.extensions.showAdWithTimeout
 
-class SecondActivity : AppCompatActivity(){
+class SecondActivity : BaseActivity(){
     lateinit var binding: ActivitySecondBinding
     val bannerAd by lazy { BannerAd(this) }
     val interstitialAd by lazy { AdmobInterstitial(applicationContext) }

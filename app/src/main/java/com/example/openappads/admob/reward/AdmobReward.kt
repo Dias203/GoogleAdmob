@@ -30,7 +30,7 @@ class AdmobReward(private val context: Context) {
         return rewardedAd != null && !isLoading
     }
 
-    fun isAdError(): Boolean {
+    fun isError(): Boolean {
         return isError
     }
 
