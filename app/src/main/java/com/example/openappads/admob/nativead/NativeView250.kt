@@ -14,18 +14,30 @@ class NativeView250 @JvmOverloads constructor(
 
     var binding: AdUnifiedBinding? = null
     init {
-        binding = AdUnifiedBinding.inflate(LayoutInflater.from(context), this, false)
+        binding = AdUnifiedBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
 
     fun loaded(nativeAd: NativeAd) {
         binding?.let {unifiedAdBinding ->
+            val nativeAdView = unifiedAdBinding.root
 
-            unifiedAdBinding.root.mediaView = unifiedAdBinding.adMedia
 
             unifiedAdBinding.adHeadline.text = nativeAd.headline
-            nativeAd.mediaContent?.let { unifiedAdBinding.adMedia.mediaContent = it }
 
+
+            nativeAdView.apply {
+                headlineView = unifiedAdBinding.adHeadline
+                mediaView = unifiedAdBinding.adMedia
+                nativeAd.mediaContent?.let { unifiedAdBinding.adMedia.mediaContent = it }
+                callToActionView = unifiedAdBinding.adCallToAction
+                unifiedAdBinding.adAppIcon.setImageDrawable(nativeAd.icon?.drawable)
+                unifiedAdBinding.adStars.rating = nativeAd.starRating!!.toFloat()
+                unifiedAdBinding.adBody.text = nativeAd.body
+
+                setNativeAd(nativeAd)
+            }
+            /*
             if (nativeAd.body == null) {
                 unifiedAdBinding.adBody.visibility = View.INVISIBLE
             } else {
@@ -54,7 +66,7 @@ class NativeView250 @JvmOverloads constructor(
                 unifiedAdBinding.adStars.visibility = View.VISIBLE
             }
 
-            unifiedAdBinding.root.setNativeAd(nativeAd)
+            unifiedAdBinding.root.setNativeAd(nativeAd)*/
         }
     }
 }

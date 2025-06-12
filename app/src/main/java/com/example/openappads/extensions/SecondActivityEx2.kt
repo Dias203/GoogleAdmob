@@ -25,7 +25,7 @@ fun SecondActivity.setOnClick() {
     binding.icBack.setOnClickListener {
         admobOpenAppManager.locked()
         interstitialAd.preloadInterstitialAd()
-        if(!interstitialAd.finishCoolOffTime()) {
+        if (!interstitialAd.finishCoolOffTime()) {
             openMainActivity()
         } else {
             //setLoadingState(true)
@@ -44,14 +44,14 @@ fun SecondActivity.setOnClick() {
     }
 }
 
-fun SecondActivity.openMainActivity(){
+fun SecondActivity.openMainActivity() {
     val intentAd = Intent(this, MainActivity::class.java).apply {
         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
     startActivity(intentAd)
 }
 
-fun SecondActivity.registerListenerInterstitial(){
+fun SecondActivity.registerListenerInterstitial() {
     interstitialAd.listener = object : InterstitialAdmobListener {
         override fun onAdDismiss() {
             interstitialAd.preloadInterstitialAd()
@@ -67,7 +67,8 @@ fun SecondActivity.registerListenerInterstitial(){
         }
 
         override fun onFailedToShow(error: String) {
-            openMainActivity()            }
+            openMainActivity()
+        }
 
         override fun onShowed() {
             TODO("Not yet implemented")
@@ -78,10 +79,13 @@ fun SecondActivity.registerListenerInterstitial(){
 private fun SecondActivity.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
+
 fun SecondActivity.loadAdMob() {
     bannerAd.load(binding.adBannerContainer, true)
     interstitialAd.preloadInterstitialAd()
-    nativeAd.loadNativeAd(binding.adFrame)
+    nativeAd.loadNativeAd { ad ->
+        binding.adFrame.loaded(ad)
+    }
 }
 
 fun SecondActivity.onActivityDestroyed() {
